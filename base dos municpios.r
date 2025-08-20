@@ -1,0 +1,1046 @@
+# Conteúdo HTML completo
+html_content <- '<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicadores Econômicos - Pernambuco</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px, 6px, rgba(0, 0, 0, 0.05);
+        }
+        
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        select, button, input {
+            padding: 0.75rem, 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        select, input {
+            flex: 1;
+            min-width: 200px;
+            background-color: white;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button.export {
+            background-color: var(--accent-color);
+        }
+        
+        button.export:hover {
+            background-color: #c0392b;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px, 6px, rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 0.5rem, 0;
+        }
+        
+        .stat-label {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        th, td {
+            padding: 0.75rem, 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            background-color: var(--dark-color);
+            color: white;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: #777;
+        }
+        
+        .data-table-container {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+        
+        .data-table {
+            width: 100%;
+            min-width: 600px;
+        }
+        
+        .data-table th {
+            cursor: pointer;
+        }
+        
+        .data-table th:hover {
+            background-color: #d6dbdf;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .pagination button {
+            padding: 0.5rem, 1rem;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+        }
+        
+        .pagination button.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .source-info {
+            background-color: #e8f4fc;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight {
+            background-color: #fffacd;
+        }
+        
+        .developer-links {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .developer-links a {
+            color: #3498db;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .developer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .help-section {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+        
+        .help-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .help-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .help-section li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .text-output {
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .copy-btn {
+            margin-top: 0.5rem;
+            background-color: #6c757d;
+        }
+        
+        .copy-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+            }
+            
+            select, button, input {
+                width: 100%;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .developer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indicadores Econômicos de Pernambuco</h1>
+        <p class="subtitle">Dados atualizados para todos os 185 municípios</p>
+    </header>
+    
+    <div class="container">
+        <div class="help-section">
+            <h3>Como usar esta dashboard</h3>
+            <p>Esta ferramenta permite visualizar e comparar indicadores econômicos dos municípios de Pernambuco:</p>
+            <ul>
+                <li><strong>Buscar município:</strong> Use o campo de busca para encontrar um município específico ou selecione na lista</li>
+                <li><strong>Selecionar indicador:</strong> Escolha o tipo de indicador que deseja visualizar (População, PIB ou Empresas)</li>
+                <li><strong>Ordenar tabela:</strong> Clique no cabeçalho de qualquer coluna para ordenar os dados</li>
+                <li><strong>Navegar entre páginas:</strong> Use la paginação para navegar entre os municípios</li>
+                <li><strong>Visualizar gráficos:</strong> Ao selecionar um município, gráficos comparativos serão gerados automaticamente</li>
+                <li><strong>Copiar dados:</strong> Use o botão "Copiar Resumo" para obter os dados formatados do município selecionado</li>
+            </ul>
+        </div>
+        
+        <div class="source-info">
+            <strong>Fontes dos dados:</strong> Base dos Dados (IBGE, RAIS, PIB Municipal).
+            <br>Os dados são baseados em informações públicas oficiais mais recentes disponíveis.
+        </div>
+        
+        <div class="card">
+            <h2>Filtros e Busca</h2>
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Buscar município...">
+            </div>
+            
+            <div class="filters">
+                <select id="municipio-select">
+                    <option value="">Selecione um município</option>
+                </select>
+                
+                <select id="indicador-select">
+                    <option value="">Selecione um indicador</option>
+                    <option value="pib">PIB per capita</option>
+                    <option value="populacao">População</option>
+                    <option value="empresas">Número de empresas</option>
+                </select>
+                
+                <button id="search-btn">
+                    <span>Buscar Dados</span>
+                </button>
+            </div>
+        </div>
+        
+        <div id="results" style="display: none;">
+            <div class="card">
+                <h2 id="municipio-name">Nome do Município</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">População</div>
+                        <div class="stat-value" id="populacao-value">-</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">PIB per capita (R$)</div>
+                        <div class="stat-value" id="pib-value">-</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">Número de empresas</div>
+                        <div class="stat-value" id="empresas-value">-</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">Posição no ranking estadual</div>
+                        <div class="stat-value" id="ranking-value">-</div>
+                    </div>
+                </div>
+                
+                <h3>Resumo para Cópia</h3>
+                <div class="text-output" id="text-output">
+                    Selecione um município para gerar o resumo.
+                </div>
+                <button class="copy-btn" id="copy-btn">
+                    <span>Copiar Resumo</span>
+                </button>
+                
+                <div class="chart-container">
+                    <canvas id="indicadores-chart"></canvas>
+                </div>
+                
+                <h3>Comparativo com outros municípios</h3>
+                <div class="chart-container">
+                    <canvas id="comparativo-chart"></canvas>
+                </div>
+                
+                <h3>Dados Detalhados</h3>
+                <table id="detalhes-table">
+                    <thead>
+                        <tr>
+                            <th>Indicador</th>
+                            <th>Valor</th>
+                            <th>Posição no Estado</th>
+                            <th>Comparativo Estadual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Todos os Municípios de Pernambuco</h2>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="nome">Município ↗</th>
+                            <th data-sort="populacao">População ↗</th>
+                            <th data-sort="pib">PIB per capita (R$) ↗</th>
+                            <th data-sort="empresas">Número de empresas ↗</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-municipios-table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination">
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Desenvolvido para análise de indicadores econômicos de Pernambuco</p>
+        <p>Fontes: Base dos Dados (IBGE, RAIS, PIB Municipal) | Dados atualizados em 2023</p>
+        <div class="developer-links">
+            <a href="https://www.linkedin.com/in/jrsvf" target="_blank">
+                <span>LinkedIn: www.linkedin.com/in/jrsvf</span>
+            </a>
+            <a href="https://github.com/jrsvf" target="_blank">
+                <span>GitHub: https://github.com/jrsvf</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Dados dos municípios de Pernambuco
+        const municipiosData = [
+            { id: 1, nome: "Abreu e Lima", populacao: 99331, pib: 17358.71, empresas: 34040 },
+            { id: 2, nome: "Afogados da Ingazeira", populacao: 40120, pib: 13504.89, empresas: 22619 },
+            { id: 3, nome: "Afrânio", populacao: 16486, pib: 12726.86, empresas: 6775 },
+            { id: 4, nome: "Agrestina", populacao: 23739, pib: 14864.06, empresas: 7547 },
+            { id: 5, nome: "Alagoinha", populacao: 13256, pib: 10934.29, empresas: 4220 },
+            { id: 6, nome: "Aliança", populacao: 35245, pib: 11726.88, empresas: 13472 },
+            { id: 7, nome: "Altinho", populacao: 20657, pib: 10775.48, empresas: 5678 },
+            { id: 8, nome: "Amaraji", populacao: 18236, pib: 16144.28, empresas: 6471 },
+            { id: 9, nome: "Angelim", populacao: 9965, pib: 14275.97, empresas: 2719 },
+            { id: 10, nome: "Araripina", populacao: 85135, pib: 14942.06, empresas: 46088 },
+            { id: 11, nome: "Araçoiaba", populacao: 19314, pib: 8381.69, empresas: 2897 },
+            { id: 12, nome: "Arcoverde", populacao: 77660, pib: 15650.05, empresas: 57984 },
+            { id: 13, nome: "Barra de Guabiraba", populacao: 12299, pib: 11947.56, empresas: 3223 },
+            { id: 14, nome: "Barreiros", populacao: 39993, pib: 12601.91, empresas: 23541 },
+            { id: 15, nome: "Belo Jardim", populacao: 79143, pib: 34937.21, empresas: 38679 },
+            { id: 16, nome: "Belém de Maria", populacao: 10339, pib: 9623.66, empresas: 2450 },
+            { id: 17, nome: "Belém do São Francisco", populacao: 18321, pib: 19993.07, empresas: 9764 },
+            { id: 18, nome: "Betânia", populacao: 11320, pib: 9302.74, empresas: 2470 },
+            { id: 19, nome: "Bezerros", populacao: 61398, pib: 15681.72, empresas: 31709 },
+            { id: 20, nome: "Bodocó", populacao: 34469, pib: 9196.96, empresas: 9762 },
+            { id: 21, nome: "Bom Conselho", populacao: 43577, pib: 14758.96, empresas: 15069 },
+            { id: 22, nome: "Bom Jardim", populacao: 37190, pib: 9867.92, empresas: 14146 },
+            { id: 23, nome: "Bonito", populacao: 37953, pib: 14210.73, empresas: 15543 },
+            { id: 24, nome: "Brejinho", populacao: 7706, pib: 10884.89, empresas: 2093 },
+            { id: 25, nome: "Brejo da Madre de Deus", populacao: 48313, pib: 9549.33, empresas: 10010 },
+            { id: 26, nome: "Brejão", populacao: 9084, pib: 20220.06, empresas: 2803 },
+            { id: 27, nome: "Buenos Aires", populacao: 12818, pib: 10387.89, empresas: 3456 },
+            { id: 28, nome: "Buíque", populacao: 49786, pib: 11027.5, empresas: 11027 },
+            { id: 29, nome: "Cabo de Santo Agostinho", populacao: 203084, pib: 67491.23, empresas: 90745 },
+            { id: 30, nome: "Cabrobó", populacao: 30695, pib: 14362.7, empresas: 15099 },
+            { id: 31, nome: "Cachoeirinha", populacao: 19789, pib: 12854.06, empresas: 7012 },
+            { id: 32, nome: "Caetés", populacao: 28848, pib: 14688.26, empresas: 5488 },
+            { id: 33, nome: "Calumbi", populacao: 5241, pib: 9597.41, empresas: 1613 },
+            { id: 34, nome: "Calçado", populacao: 11113, pib: 10375.15, empresas: 2261 },
+            { id: 35, nome: "Camaragibe", populacao: 146912, pib: 15176.98, empresas: 55967 },
+            { id: 36, nome: "Camocim de São Félix", populacao: 17362, pib: 10434.34, empresas: 5887 },
+            { id: 37, nome: "Camutanga", populacao: 7764, pib: 36755.41, empresas: 2580 },
+            { id: 38, nome: "Canhotinho", populacao: 24340, pib: 10401.44, empresas: 6260 },
+            { id: 39, nome: "Capoeiras", populacao: 18445, pib: 13231.44, empresas: 5266 },
+            { id: 40, nome: "Carnaubeira da Penha", populacao: 12226, pib: 6823.41, empresas: 2407 },
+            { id: 41, nome: "Carnaíba", populacao: 18437, pib: 10497.69, empresas: 5173 },
+            { id: 42, nome: "Carpina", populacao: 78865, pib: 22125.34, empresas: 50671 },
+            { id: 43, nome: "Caruaru", populacao: 378180, pib: 22908.47, empresas: 293703 },
+            { id: 44, nome: "Casinhas", populacao: 12629, pib: 8038.72, empresas: 1554 },
+            { id: 45, nome: "Catende", populacao: 31975, pib: 11276.5, empresas: 13783 },
+            { id: 46, nome: "Cedro", populacao: 10512, pib: 11929.32, empresas: 4457 },
+            { id: 47, nome: "Chã Grande", populacao: 20494, pib: 12256.9, empresas: 8470 },
+            { id: 48, nome: "Chã de Alegria", populacao: 12387, pib: 13623.8, empresas: 2492 },
+            { id: 49, nome: "Condado", populacao: 24586, pib: 10205.6, empresas: 7493 },
+            { id: 50, nome: "Correntes", populacao: 17153, pib: 11194.31, empresas: 4818 },
+            { id: 51, nome: "Cortês", populacao: 10361, pib: 11726.86, empresas: 3596 },
+            { id: 52, nome: "Cumaru", populacao: 15824, pib: 6904.7, empresas: 3401 },
+            { id: 53, nome: "Ccupira", populacao: 23474, pib: 12080.43, empresas: 12731 },
+            { id: 54, nome: "Custódia", populacao: 35915, pib: 16535.71, empresas: 14620 },
+            { id: 55, nome: "Dormentes", populacao: 16159, pib: 15225.14, empresas: 6925 },
+            { id: 56, nome: "Escada", populacao: 59526, pib: 21947.23, empresas: 25410 },
+            { id: 57, nome: "Exu", populacao: 31803, pib: 10222.84, empresas: 12198 },
+            { id: 58, nome: "Feira Nova", populacao: 21362, pib: 11588.33, empresas: 6816 },
+            { id: 59, nome: "Fernando de Noronha", populacao: 2947, pib: 77896.84, empresas: 8657 },
+            { id: 60, nome: "Ferreiros", populacao: 15040, pib: 8810.04, empresas: 4626 },
+            { id: 61, nome: "Flores", populacao: 20213, pib: 9543.46, empresas: 6232 },
+            { id: 62, nome: "Floresta", populacao: 30110, pib: 14786.22, empresas: 11962 },
+            { id: 63, nome: "Frei Miguelinho", populacao: 13666, pib: 9618.1, empresas: 3143 },
+            { id: 64, nome: "Gameleira", populacao: 18012, pib: 15226.4, empresas: 5012 },
+            { id: 65, nome: "Garanhuns", populacao: 142286, pib: 21626.25, empresas: 101803 },
+            { id: 66, nome: "Glória do Goitá", populacao: 29123, pib: 19043.92, empresas: 7003 },
+            { id: 67, nome: "Goiana", populacao: 80983, pib: 131669.17, empresas: 44463 },
+            { id: 68, nome: "Granito", populacao: 6971, pib: 11251.18, empresas: 2357 },
+            { id: 69, nome: "Gravatá", populacao: 85983, pib: 15813.37, empresas: 59716 },
+            { id: 70, nome: "Iati", populacao: 17118, pib: 11438.25, empresas: 3969 },
+            { id: 71, nome: "Ibimirim", populacao: 27406, pib: 12045.5, empresas: 9934 },
+            { id: 72, nome: "Ibirajuba", populacao: 7127, pib: 12000.42, empresas: 1552 },
+            { id: 73, nome: "Igarassu", populacao: 115281, pib: 30112.74, empresas: 41424 },
+            { id: 74, nome: "Iguaraci", populacao: 10950, pib: 10262.01, empresas: 4283 },
+            { id: 75, nome: "Ilha de Itamaracá", populacao: 22879, pib: 13078.89, empresas: 9796 },
+            { id: 76, nome: "Inajá", populacao: 23871, pib: 8247.66, empresas: 5120 },
+            { id: 77, nome: "Ingazeira", populacao: 4750, pib: 10630.95, empresas: 1437 },
+            { id: 78, nome: "Ipojuca", populacao: 98762, pib: 151164.88, empresas: 51806 },
+            { id: 79, nome: "Ipubi", populacao: 28838, pib: 11802.97, empresas: 8589 },
+            { id: 80, nome: "Itacuruba", populacao: 4394, pib: 16223.49, empresas: 1650 },
+            { id: 81, nome: "Itambé", populacao: 34925, pib: 14965.13, empresas: 15043 },
+            { id: 82, nome: "Itapetim", populacao: 13492, pib: 10367.11, empresas: 5625 },
+            { id: 83, nome: "Itapissuma", populacao: 27565, pib: 86473.46, empresas: 6407 },
+            { id: 84, nome: "Itaquitinga", populacao: 16562, pib: 9712.41, empresas: 4671 },
+            { id: 85, nome: "Itaíba", populacao: 33498, pib: 8460.59, empresas: 5635 },
+            { id: 86, nome: "Jaboatão dos Guararapes", populacao: 653793, pib: 24676.86, empresas: 302092 },
+            { id: 87, nome: "Jaqueira", populacao: 10237, pib: 10921.27, empresas: 2878 },
+            { id: 88, nome: "Jataúba", populacao: 15419, pib: 10043.58, empresas: 4170 },
+            { id: 89, nome: "Jatobá", populacao: 14002, pib: 10983.65, empresas: 5723 },
+            { id: 90, nome: "Joaquim Nabuco", populacao: 13099, pib: 13841.51, empresas: 3236 },
+            { id: 91, nome: "João Alfredo", populacao: 27710, pib: 11427.07, empresas: 9635 },
+            { id: 92, nome: "Jucati", populacao: 11536, pib: 11205.79, empresas: 1832 },
+            { id: 93, nome: "Jupi", populacao: 15336, pib: 13968.7, empresas: 4271 },
+            { id: 94, nome: "Jurema", populacao: 12713, pib: 10449.15, empresas: 3536 },
+            { id: 95, nome: "Lagoa Grande", populacao: 23580, pib: 19374.22, empresas: 8455 },
+            { id: 96, nome: "Lagoa de Itaenga", populacao: 18813, pib: 25666.24, empresas: 6179 },
+            { id: 97, nome: "Lagoa do Carro", populacao: 17368, pib: 17309.71, empresas: 5751 },
+            { id: 98, nome: "Lagoa do Ouro", populacao: 11859, pib: 11739.86, empresas: 2587 },
+            { id: 99, nome: "Lagoa dos Gatos", populacao: 14139, pib: 9579.39, empresas: 3237 },
+            { id: 100, nome: "Lajedo", populacao: 39436, pib: 14848.77, empresas: 20172 },
+            { id: 101, nome: "Limoeiro", populacao: 55917, pib: 14992.63, empresas: 40098 },
+            { id: 102, nome: "Macaparana", populacao: 23187, pib: 12230.04, empresas: 8333 },
+            { id: 103, nome: "Machados", populacao: 11068, pib: 19542.37, empresas: 3368 },
+            { id: 104, nome: "Manari", populacao: 24255, pib: 5737.09, empresas: 2364 },
+            { id: 105, nome: "Maraial", populacao: 8935, pib: 10351.43, empresas: 3424 },
+            { id: 106, nome: "Mirandiba", populacao: 13359, pib: 12231.9, empresas: 5640 },
+            { id: 107, nome: "Moreilândia", populacao: 10503, pib: 8662.95, empresas: 3380 },
+            { id: 108, nome: "Moreno", populacao: 54637, pib: 16335.19, empresas: 22939 },
+            { id: 109, nome: "Nazaré da Mata", populacao: 30589, pib: 22507.05, empresas: 16008 },
+            { id: 110, nome: "Olinda", populacao: 349920, pib: 16541.64, empresas: 234773 },
+            { id: 111, nome: "Orobó", populacao: 21173, pib: 18835.03, empresas: 7371 },
+            { id: 112, nome: "Orocó", populacao: 13670, pib: 13639.21, empresas: 4020 },
+            { id: 113, nome: "Ouricuri", populacao: 65200, pib: 11971.06, empresas: 25207 },
+            { id: 114, nome: "Palmares", populacao: 53987, pib: 17117.94, empresas: 38767 },
+            { id: 115, nome: "Palmeirina", populacao: 7032, pib: 11370.73, empresas: 1983 },
+            { id: 116, nome: "Panelas", populacao: 22412, pib: 10242.55, empresas: 5519 },
+            { id: 117, nome: "Paranatama", populacao: 12181, pib: 23460.55, empresas: 2611 },
+            { id: 118, nome: "Parnamirim", populacao: 18563, pib: 11484.67, empresas: 5670 },
+            { id: 119, nome: "Passira", populacao: 28235, pib: 9369.47, empresas: 8109 },
+            { id: 120, nome: "Paudalho", populacao: 55072, pib: 16820.31, empresas: 18324 },
+            { id: 121, nome: "Paulista", populacao: 348253, pib: 16056.29, empresas: 127819 },
+            { id: 122, nome: "Pedra", populacao: 22884, pib: 13389.18, empresas: 5580 },
+            { id: 123, nome: "Pesqueira", populacao: 60853, pib: 14291.01, empresas: 35111 },
+            { id: 124, nome: "Petrolina", populacao: 388145, pib: 20595.49, empresas: 238952 },
+            { id: 125, nome: "Petrolândia", populacao: 34302, pib: 48856.51, empresas: 16468 },
+            { id: 126, nome: "Pombos", populacao: 29499, pib: 18054.27, empresas: 10338 },
+            { id: 127, nome: "Poção", populacao: 10499, pib: 9725.4, empresas: 3739 },
+            { id: 128, nome: "Primavera", populacao: 13536, pib: 21549.65, empresas: 3470 },
+            { id: 129, nome: "Quipapá", populacao: 17873, pib: 10760.64, empresas: 6420 },
+            { id: 130, nome: "Quixaba", populacao: 6508, pib: 10304.86, empresas: 2369 },
+            { id: 131, nome: "Recife", populacao: 1494586, pib: 36779.62, empresas: 1731551 },
+            { id: 132, nome: "Riacho das Almas", populacao: 20307, pib: 12831.19, empresas: 6213 },
+            { id: 133, nome: "Ribeirão", populacao: 33484, pib: 17214.4, empresas: 18301 },
+            { id: 134, nome: "Rio Formoso", populacao: 19905, pib: 19084.2, empresas: 6378 },
+            { id: 135, nome: "Sairé", populacao: 10910, pib: 16152.61, empresas: 3753 },
+            { id: 136, nome: "Salgadinho", populacao: 5733, pib: 14117.91, empresas: 1404 },
+            { id: 137, nome: "Salgueiro", populacao: 62206, pib: 16109.46, empresas: 35670 },
+            { id: 138, nome: "Saloá", populacao: 13530, pib: 12642.35, empresas: 3526 },
+            { id: 139, nome: "Sanharó", populacao: 18606, pib: 13343.22, empresas: 6413 },
+            { id: 140, nome: "Santa Cruz", populacao: 14178, pib: 9422.49, empresas: 3980 },
+            { id: 141, nome: "Santa Cruz da Baixa Verde", populacao: 11598, pib: 9790.83, empresas: 3775 },
+            { id: 142, nome: "Santa Cruz do Capibaribe", populacao: 97386, pib: 19774.24, empresas: 75187 },
+            { id: 143, nome: "Santa Filomena", populacao: 11613, pib: 9629.73, empresas: 2807 },
+            { id: 144, nome: "Santa Maria da Boa Vista", populacao: 40464, pib: 13938.32, empresas: 17130 },
+            { id: 145, nome: "Santa Maria do Cambucá", populacao: 13715, pib: 8914.47, empresas: 3038 },
+            { id: 146, nome: "Santa Terezinha", populacao: 10164, pib: 11297.13, empresas: 3598 },
+            { id: 147, nome: "Serra Talhada", populacao: 91624, pib: 18481.48, empresas: 57362 },
+            { id: 148, nome: "Serrita", populacao: 18204, pib: 8852.61, empresas: 4236 },
+            { id: 149, nome: "Sertânia", populacao: 31593, pib: 11628.81, empresas: 14722 },
+            { id: 150, nome: "Sirinhaém", populacao: 37503, pib: 19264.99, empresas: 9722 },
+            { id: 151, nome: "Solidão", populacao: 5246, pib: 10800.8, empresas: 1166 },
+            { id: 152, nome: "Surubim", populacao: 63979, pib: 14310.29, empresas: 36447 },
+            { id: 153, nome: "São Benedito do Sul", populacao: 15605, pib: 7498.69, empresas: 2304 },
+            { id: 154, nome: "São Bento do Una", populacao: 48621, pib: 30556.88, empresas: 13781 },
+            { id: 155, nome: "São Caitano", populacao: 36982, pib: 12105.32, empresas: 10565 },
+            { id: 156, nome: "São Joaquim do Monte", populacao: 20098, pib: 9228.13, empresas: 3652 },
+            { id: 157, nome: "São José da Coroa Grande", populacao: 18802, pib: 15477.45, empresas: 7633 },
+            { id: 158, nome: "São José do Belmonte", populacao: 34836, pib: 9804.34, empresas: 11406 },
+            { id: 159, nome: "São José do Egito", populacao: 31154, pib: 14159.24, empresas: 16459 },
+            { id: 160, nome: "São João", populacao: 23411, pib: 16667.85, empresas: 4278 },
+            { id: 161, nome: "São Lourenço da Mata", populacao: 110765, pib: 13038.41, empresas: 32832 },
+            { id: 162, nome: "São Vicente Ferrer", populacao: 16331, pib: 12830.08, empresas: 4436 },
+            { id: 163, nome: "Tabira", populacao: 27505, pib: 11448.94, empresas: 12298 },
+            { id: 164, nome: "Tacaimbó", populacao: 13608, pib: 10961.13, empresas: 2911 },
+            { id: 165, nome: "Tacaratu", populacao: 23166, pib: 10877.06, empresas: 5094 },
+            { id: 166, nome: "Tamandaré", populacao: 23494, pib: 16848.3, empresas: 9713 },
+            { id: 167, nome: "Taquaritinga do Norte", populacao: 24335, pib: 13751.47, empresas: 9004 },
+            { id: 168, nome: "Terezinha", populacao: 6646, pib: 11377.97, empresas: 1576 },
+            { id: 169, nome: "Terra Nova", populacao: 8832, pib: 10786.01, empresas: 2467 },
+            { id: 170, nome: "Timbaúba", populacao: 46004, pib: 16229.18, empresas: 36099 },
+            { id: 171, nome: "Toritama", populacao: 40375, pib: 18936.77, empresas: 34717 },
+            { id: 172, nome: "Tracunhaém", populacao: 13874, pib: 12730.21, empresas: 3556 },
+            { id: 173, nome: "Trindade", populacao: 30231, pib: 13860.74, empresas: 14841 },
+            { id: 174, nome: "Triunfo", populacao: 14647, pib: 10743.36, empresas: 7636 },
+            { id: 175, nome: "Tupanatinga", populacao: 28352, pib: 8011.08, empresas: 4646 },
+            { id: 176, nome: "Tuparetama", populacao: 8018, pib: 11117.36, empresas: 4212 },
+            { id: 177, nome: "Venturosa", populacao: 17676, pib: 13993.49, empresas: 6595 },
+            { id: 178, nome: "Verdejante", populacao: 9170, pib: 8825.63, empresas: 2180 },
+            { id: 179, nome: "Vertente do Lério", populacao: 7549, pib: 9810.57, empresas: 1529 },
+            { id: 180, nome: "Vertentes", populacao: 21393, pib: 9092.27, empresas: 6649 },
+            { id: 181, nome: "Vicência", populacao: 26254, pib: 19784.64, empresas: 9306 },
+            { id: 182, nome: "Vitória de Santo Antão", populacao: 135182, pib: 33671.96, empresas: 69062 },
+            { id: 183, nome: "Xexéu", populacao: 11288, pib: 12527.55, empresas: 2942 },
+            { id: 184, nome: "Água Preta", populacao: 26473, pib: 9816.27, empresas: 6707 },
+            { id: 185, nome: "Águas Belas", populacao: 41549, pib: 9653.93, empresas: 12372 }
+        ];
+
+        // Aguardar o carregamento do DOM
+        document.addEventListener("DOMContentLoaded", function() {
+            const municipioSelect = document.getElementById("municipio-select");
+            const indicadorSelect = document.getElementById("indicador-select");
+            const searchBtn = document.getElementById("search-btn");
+            const resultsDiv = document.getElementById("results");
+            const municipioName = document.getElementById("municipio-name");
+            const allMunicipiosTable = document.getElementById("all-municipios-table");
+            const paginationDiv = document.getElementById("pagination");
+            const searchInput = document.getElementById("search-input");
+            const textOutput = document.getElementById("text-output");
+            const copyBtn = document.getElementById("copy-btn");
+            
+            // Variáveis para ordenação e paginação
+            let currentSortField = "nome";
+            let currentSortDirection = "asc";
+            let currentPage = 1;
+            const itemsPerPage = 10;
+            let filteredData = [...municipiosData];
+            let municipioSelecionado = null;
+            
+            // Preencher select de municípios
+            municipiosData.forEach(municipio => {
+                const option = document.createElement("option");
+                option.value = municipio.id;
+                option.textContent = municipio.nome;
+                municipioSelect.appendChild(option);
+            });
+            
+            // Preencher tabela de todos os municípios
+            function renderTable(page = 1) {
+                currentPage = page;
+                
+                // Ordenar dados
+                const sortedData = [...filteredData].sort((a, b) => {
+                    if (currentSortDirection === "asc") {
+                        return a[currentSortField] > b[currentSortField] ? 1 : -1;
+                    } else {
+                        return a[currentSortField] < b[currentSortField] ? 1 : -1;
+                    }
+                });
+                
+                // Calcular índices para paginação
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedData = sortedData.slice(startIndex, endIndex);
+                
+                // Limpar tabela
+                allMunicipiosTable.innerHTML = "";
+                
+                // Preencher com dados
+                paginatedData.forEach(municipio => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${municipio.nome}</td>
+                        <td>${municipio.populacao.toLocaleString()}</td>
+                        <td>R$ ${municipio.pib.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                        <td>${municipio.empresas.toLocaleString()}</td>
+                    `;
+                    allMunicipiosTable.appendChild(row);
+                });
+                
+                // Atualizar paginação
+                updatePagination(sortedData.length);
+            }
+            
+            // Atualizar controles de paginação
+            function updatePagination(totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                paginationDiv.innerHTML = "";
+                
+                // Botão anterior
+                const prevButton = document.createElement("button");
+                prevButton.innerHTML = "&laquo;";
+                prevButton.disabled = currentPage === 1;
+                prevButton.addEventListener("click", () => renderTable(currentPage - 1));
+                paginationDiv.appendChild(prevButton);
+                
+                // Botões de página
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement("button");
+                    pageButton.textContent = i;
+                    pageButton.classList.toggle("active", i === currentPage);
+                    pageButton.addEventListener("click", () => renderTable(i));
+                    paginationDiv.appendChild(pageButton);
+                }
+                
+                // Botão próximo
+                const nextButton = document.createElement("button");
+                nextButton.innerHTML = "&raquo;";
+                nextButton.disabled = currentPage === totalPages;
+                nextButton.addEventListener("click", () => renderTable(currentPage + 1));
+                paginationDiv.appendChild(nextButton);
+            }
+            
+            // Configurar ordenação da tabela
+            document.querySelectorAll(".data-table th[data-sort]").forEach(header => {
+                header.addEventListener("click", () => {
+                    const sortField = header.getAttribute("data-sort");
+                    
+                    if (currentSortField === sortField) {
+                        // Alternar direção se clicar no mesmo campo
+                        currentSortDirection = currentSortDirection === "asc" ? "desc" : "asc";
+                    } else {
+                        // Ordenar por novo campo (asc por padrão)
+                        currentSortField = sortField;
+                        currentSortDirection = "asc";
+                    }
+                    
+                    // Atualizar indicador visual na tabela
+                    document.querySelectorAll(".data-table th").forEach(th => {
+                        th.textContent = th.textContent.replace(" ↗", "").replace(" ↘", "");
+                    });
+                    
+                    header.textContent += currentSortDirection === "asc" ? " ↗" : " ↘";
+                    
+                    // Renderizar tabela com nova ordenação
+                    renderTable(1);
+                });
+            });
+            
+            // Configurar busca em tempo real
+            searchInput.addEventListener("input", function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                
+                filteredData = municipiosData.filter(municipio => {
+                    return municipio.nome.toLowerCase().includes(searchTerm);
+                });
+                
+                renderTable(1);
+            });
+            
+            // Inicializar tabela
+            renderTable(1);
+            
+            // Função para atualizar o texto de saída
+            function atualizarTextoOutput(municipio) {
+                const rankingPib = getRanking(municipio, "pib");
+                const rankingPop = getRanking(municipio, "populacao");
+                const rankingEmp = getRanking(municipio, "empresas");
+                
+                const texto = `MUNICÍPIO: ${municipio.nome}
+
+POPULAÇÃO: ${municipio.populacao.toLocaleString()} habitantes
+- Posição no estado: ${rankingPop}º de ${municipiosData.length}
+
+PIB PER CAPITA: R$ ${municipio.pib.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+- Posição no estado: ${rankingPib}º de ${municipiosData.length}
+
+EMPRESAS: ${municipio.empresas.toLocaleString()} estabelecimentos
+- Posição no estado: ${rankingEmp}º de ${municipiosData.length}
+
+Fonte: Base dos Dados (IBGE, RAIS, PIB Municipal) | Dados mais recentes disponíveis`;
+                
+                textOutput.textContent = texto;
+                municipioSelecionado = municipio;
+            }
+            
+            // Evento de busca
+            searchBtn.addEventListener("click", function() {
+                const municipioId = municipioSelect.value;
+                const indicador = indicadorSelect.value;
+                
+                if (!municipioId || !indicador) {
+                    alert("Por favor, selecione um município e um indicador.");
+                    return;
+                }
+                
+                // Encontrar dados do município selecionado
+                const municipio = municipiosData.find(m => m.id == municipioId);
+                
+                if (municipio) {
+                    // Atualizar nome do município
+                    municipioName.textContent = municipio.nome;
+                    
+                    // Atualizar estatísticas
+                    document.getElementById("populacao-value").textContent = municipio.populacao.toLocaleString();
+                    document.getElementById("pib-value").textContent = `R$ ${municipio.pib.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
+                    document.getElementById("empresas-value").textContent = municipio.empresas.toLocaleString();
+                    document.getElementById("ranking-value").textContent = `${getRanking(municipio, "pib")}º`;
+                    
+                    // Atualizar texto de saída
+                    atualizarTextoOutput(municipio);
+                    
+                    // Atualizar tabela de detalhes
+                    const tableBody = document.querySelector("#detalhes-table tbody");
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td>População</td>
+                            <td>${municipio.populacao.toLocaleString()}</td>
+                            <td>${getRanking(municipio, "populacao")}º</td>
+                            <td>${getComparativo(municipio, "populacao")}</td>
+                        </tr>
+                        <tr>
+                            <td>PIB per capita</td>
+                            <td>R$ ${municipio.pib.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}</td>
+                            <td>${getRanking(municipio, "pib")}º</td>
+                            <td>${getComparativo(municipio, "pib")}</td>
+                        </tr>
+                        <tr>
+                            <td>Número de empresas</td>
+                            <td>${municipio.empresas.toLocaleString()}</td>
+                            <td>${getRanking(municipio, "empresas")}º</td>
+                            <td>${getComparativo(municipio, "empresas")}</td>
+                        </tr>
+                    `;
+                    
+                    // Gerar gráficos
+                    renderCharts(municipio, indicador);
+                    
+                    // Mostrar resultados
+                    resultsDiv.style.display = "block";
+                    
+                    // Scroll para os resultados
+                    resultsDiv.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+            
+            // Evento de cópia para área de transferência
+            copyBtn.addEventListener("click", function() {
+                if (!municipioSelecionado) {
+                    alert("Selecione um município primeiro.");
+                    return;
+                }
+                
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = textOutput.textContent;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(tempTextArea);
+                
+                // Feedback visual
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = "<span>✓ Copiado!</span>";
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            });
+            
+            // Função para obter ranking do município para um indicador
+            function getRanking(municipio, indicador) {
+                // Ordenar municípios pelo indicador (do maior para o menor)
+                const sorted = [...municipiosData].sort((a, b) => b[indicador] - a[indicador]);
+                
+                // Encontrar posição do município
+                const index = sorted.findIndex(m => m.id === municipio.id);
+                return index + 1; // +1 porque o índice começa em 0
+            }
+            
+            // Função para obter comparativo
+            function getComparativo(municipio, indicador) {
+                const ranking = getRanking(municipio, indicador);
+                const total = municipiosData.length;
+                
+                if (ranking <= 10) return `Top 10 (${ranking}º de ${total})`;
+                if (ranking <= 50) return `Top 50 (${ranking}º de ${total})`;
+                if (ranking <= 100) return `Top 100 (${ranking}º de ${total})`;
+                return `Posição ${ranking} de ${total}`;
+            }
+            
+            // Função para renderizar gráficos
+            function renderCharts(municipio, indicadorSelecionado) {
+                // Dados para o gráfico de indicadores do município
+                const ctx1 = document.getElementById("indicadores-chart").getContext("2d");
+                
+                // Normalizar dados para o gráfico de radar
+                const maxValues = {
+                    populacao: Math.max(...municipiosData.map(m => m.populacao)),
+                    pib: Math.max(...municipiosData.map(m => m.pib)),
+                    empresas: Math.max(...municipiosData.map(m => m.empresas))
+                };
+                
+                const normalizedData = {
+                    populacao: (municipio.populacao / maxValues.populacao) * 100,
+                    pib: (municipio.pib / maxValues.pib) * 100,
+                    empresas: (municipio.empresas / maxValues.empresas) * 100
+                };
+                
+                // Destruir gráfico anterior se existir
+                if (window.indicadoresChart) {
+                    window.indicadoresChart.destroy();
+                }
+                
+                // Criar gráfico de radar
+                window.indicadoresChart = new Chart(ctx1, {
+                    type: "radar",
+                    data: {
+                        labels: ["População", "PIB per capita", "Empresas"],
+                        datasets: [{
+                            label: `${municipio.nome} (Valores Normalizados)`,
+                            data: [
+                                normalizedData.populacao,
+                                normalizedData.pib,
+                                normalizedData.empresas
+                            ],
+                            backgroundColor: "rgba(52, 152, 219, 0.2)",
+                            borderColor: "rgba(52, 152, 219, 1)",
+                            pointBackgroundColor: "rgba(52, 152, 219, 1)",
+                            pointBorderColor: "#fff",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgba(52, 152, 219, 1)"
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            r: {
+                                angleLines: {
+                                    display: true
+                                },
+                                suggestedMin: 0,
+                                suggestedMax: 100
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: "Perfil Econômico do Município (Valores Normalizados)"
+                            }
+                        }
+                    }
+                });
+                
+                // Dados para o gráfico comparativo
+                const ctx2 = document.getElementById("comparativo-chart").getContext("2d");
+                
+                // Ordenar municípios pelo indicador selecionado
+                const sortedMunicipios = [...municipiosData].sort((a, b) => b[indicadorSelecionado] - a[indicadorSelecionado]);
+                const top5 = sortedMunicipios.slice(0, 5);
+                
+                // Verificar se o município selecionado está no top 5
+                const municipioInTop5 = top5.some(m => m.id === municipio.id);
+                
+                // Se não estiver, substituir o último pelo selecionado
+                if (!municipioInTop5) {
+                    top5[4] = municipio;
+                }
+                
+                // Destruir gráfico anterior se existir
+                if (window.comparativoChart) {
+                    window.comparativoChart.destroy();
+                }
+                
+                // Criar gráfico de barras comparativo
+                window.comparativoChart = new Chart(ctx2, {
+                    type: "bar",
+                    data: {
+                        labels: top5.map(m => m.nome),
+                        datasets: [{
+                            label: getLabel(indicadorSelecionado),
+                            data: top5.map(m => m[indicadorSelecionado]),
+                            backgroundColor: top5.map(m => m.id === municipio.id ? "rgba(231, 76, 60, 0.8)" : "rgba(52, 152, 219, 0.8)"),
+                            borderColor: top5.map(m => m.id === municipio.id ? "rgba(231, 76, 60, 1)" : "rgba(52, 152, 219, 1)"),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: getLabel(indicadorSelecionado)
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: `Comparativo com Outros Municípios - ${getLabel(indicadorSelecionado)}`
+                            },
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Função auxiliar para obter o label do indicador
+            function getLabel(indicador) {
+                const labels = {
+                    populacao: "População",
+                    pib: "PIB per capita (R$)",
+                    empresas: "Número de empresas"
+                };
+                return labels[indicador] || "Indicador";
+            }
+        });
+    </script>
+</body>
+</html>'
+
+# Salvar o arquivo HTML
+writeLines(html_content, "dashboard_pernambuco.html")
+
+# Mensagem de confirmação
+cat("✅ Arquivo HTML salvo com sucesso: dashboard_pernambuco.html\n")
+cat("\n📋 PARA PUBLICAR NO GITHUB PAGES:\n")
+cat("1. Crie um repositório em github.com\n")
+cat("2. Faça upload do arquivo 'dashboard_pernambuco.html'\n")
+cat("3. Renomeie para 'index.html' (importante!)\n")
+cat("4. Ative GitHub Pages em Settings > Pages\n")
+cat("5. Seu site estará em: https://seuusuario.github.io/nome-repositorio/\n")
+cat("\n💡 Dica: Use o nome 'index.html' para GitHub Pages detectar automaticamente\n")
